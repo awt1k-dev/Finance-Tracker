@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin panel — Finance tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_style.css') }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+    <div class="notifications">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, message in messages %}
+                <div class="toast {{ cat }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+<div class="container">
+
+    <header class="admin-header">
+        <h1>Admin panel</h1>
+        <a href="{{ url_for('home') }}" class="back">← Home</a>
+    </header>
+
+    <section class="users">
+        <h2>Users</h2>
+
+        {% if users %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Balance</th>
+                        <th>Transactions Count</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td class="{{ 'negative' if user.balance < 0 else 'positive' }}">
+                            {{ user.balance }}
+                        </td>
+                        <td>{{ user.tx_count }}</td>
+                        <td>{{ user.role }}</td>
+                        <td class="actions">
+                            <a href="{{ url_for('admin_edit_user', user_id=user.id) }}"
+                               class="btn edit">Edit</a>
+
+                            <form action="{{ url_for('admin_delete_user', user_id=user.id) }}"
+                                  method="get">
+                                <button class="btn delete" type="submit">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="empty">No users found</p>
+        {% endif %}
+    </section>
+
+</div>
+<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+
+</body>
+</html>

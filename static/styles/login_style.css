@@ -1,0 +1,135 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+    background: #000;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Контейнер */
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 40px 24px;
+    text-align: center;
+}
+
+/* Заголовок */
+.container h1 {
+    font-size: 32px;
+    margin-bottom: 24px;
+}
+
+/* Flash-сообщения */
+[class^="flash-"] {
+    display: block;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+/* Успех */
+.flash-success {
+    background: #0f2e1c;
+    color: #4cff9a;
+    border: 1px solid #1f5c3a;
+}
+
+/* Ошибка */
+.flash-error {
+    background: #2a0f0f;
+    color: #ff6b6b;
+    border: 1px solid #5c1f1f;
+}
+
+/* Предупреждение */
+.flash-warning {
+    background: #2a220f;
+    color: #ffd36b;
+    border: 1px solid #5c4a1f;
+}
+
+/* Форма */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Поля ввода */
+.login-form input {
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid #222;
+    background: #111;
+    color: #fff;
+    font-size: 15px;
+    transition: border 0.2s ease, background 0.2s ease;
+}
+
+.login-form input::placeholder {
+    color: #666;
+}
+
+.login-form input:focus {
+    outline: none;
+    border-color: #444;
+    background: #141414;
+}
+
+/* Кнопка */
+.login-form button {
+    margin-top: 8px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: #fff;
+    color: #000;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.login-form button:hover {
+    background: #e5e5e5;
+}
+
+/* Ссылка назад */
+.back {
+    display: inline-block;
+    margin-top: 28px;
+    font-size: 14px;
+    color: #777;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.back:hover {
+    color: #aaa;
+}
+
+/* Ссылка на регистрацию */
+.register {
+    display: block;
+    margin-top: 14px;
+    font-size: 14px;
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: 0.2s ease;
+}
+
+.register:hover {
+    opacity: 1;
+    text-decoration: underline;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_style.css') }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Finance tracker</h1>
+            <p>Control your incomes and expenses in only <b>one place.</b></p>
+        </header>
+
+        <main class="actions">
+            <a href="{{ url_for('login') }}" class="btn primary">Log In</a>
+            <a href="{{ url_for('profile') }}" class="btn secondary">Profile</a>
+        </main>
+
+        <footer class="footer">
+            <span>© 2025 Finance tracker</span>
+        </footer>
+    </div>
+</body>
+</html>
