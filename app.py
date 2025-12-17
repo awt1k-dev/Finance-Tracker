@@ -174,10 +174,22 @@ def create_transaction():
     if not "user_id" in session:
         return redirect(url_for("login"))
     
+    ##################
+    #    Values
+    ##################
     type = request.form.get("type")
+
     amount = request.form.get("amount")
-    category = request.form.get("category")
+
+    category = request.form['category']
+    if category == 'Другое':
+        category = request.form.get('custom_category', 'Другое')
+
     note = request.form.get("note")
+
+    ####################
+    #     Logic
+    ####################
     result = database.create_transaction(session["user_id"], type, amount, category, note)
     if result:
         flash("Transaction succesfully added!", "success")

@@ -95,6 +95,13 @@ body {
     border-radius: 14px;
     padding: 16px 20px;
     min-width: 220px;
+    transition: 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
 }
 
 .label {
@@ -153,6 +160,17 @@ th {
     color: #777;
 }
 
+tr {
+    transition: 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+tr:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+
 tr:not(:last-child) td {
     border-bottom: 1px solid #1e1e1e;
 }
@@ -176,6 +194,7 @@ tr.expense td:nth-child(2) {
     color: #666;
     font-size: 16px;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .delete-btn:hover {
@@ -242,10 +261,12 @@ input[type="number"] {
     background: transparent;
     color: #fff;
     cursor: pointer;
+    transition: 0.3s ease;
 }
 
 .transaction-form button:hover {
     background: #1a1a1a;
+    transform: translateY(-2px);
 }
 
 /* ================= MISC ================= */
@@ -305,6 +326,37 @@ input[type="number"] {
     from { opacity: 1; transform: translateX(0) scale(1); }
     to   { opacity: 0; transform: translateX(50px) scale(0.95); }
 }
+
+
+/* ================= TYPE SWITCH ================= */
+
+.type-switch {
+    display: flex;
+    gap: 8px;
+}
+
+.type-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #222;
+    background: #0f0f0f;
+    color: #777;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.type-btn.active {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #444;
+}
+
+.type-btn:hover {
+    background: #161616;
+}
+
+
 
 /* ================= MOBILE ================= */
 

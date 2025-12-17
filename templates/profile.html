@@ -38,7 +38,9 @@
                 <button type="submit" class="action-btn admin">Admin panel</button>
             </form>
             {% endif %}
-
+            <form action="{{ url_for('home') }}" method="get">
+                <button type="submit" class="action-btn admin">Home</button>
+            </form>
             <form action="{{ url_for('logout') }}" method="get">
                 <button type="submit" class="action-btn logout">Logout</button>
             </form>
@@ -114,15 +116,25 @@
                   action="{{ url_for('create_transaction') }}"
                   method="post">
 
-                <select name="type" required>
-                    <option value="" disabled selected>Type</option>
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
-                </select>
+                <!-- Transaction type -->
+                <div class="type-switch">
+                    <button type="button" class="type-btn active" data-type="income">Income</button>
+                    <button type="button" class="type-btn" data-type="expense">Expense</button>
+                </div>
+
+                <input type="hidden" name="type" id="tx-type" value="income">
+
+                <!-- Category -->
+                <select name="category" id="category-select" required></select>
+
+                <!-- Custom category -->
+                <input type="text"
+                    name="custom_category"
+                    id="custom-category"
+                    placeholder="Your category"
+                    style="display: none;">
 
                 <input type="number" name="amount" placeholder="Amount" required>
-
-                <input type="text" name="category" placeholder="Category" required>
 
                 <textarea name="note" placeholder="Note (optional)"></textarea>
 
@@ -131,8 +143,6 @@
         </section>
 
     </div>
-
-    <a href="{{ url_for('home') }}" class="back">← Home</a>
     
 </div>
 <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
