@@ -82,6 +82,7 @@ def login():
             user = database.get_user_for_login_username(login)
         
         # Add user id into session
+        session.permanent = True
         session["user_id"] = user[0]
 
         return redirect(url_for("profile"))

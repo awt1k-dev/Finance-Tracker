@@ -13,8 +13,8 @@ const categorySelect = document.getElementById('category-select');
 const customCategoryInput = document.getElementById('custom-category');
 
 const categories = {
-    income: ['Зарплата', 'Перевод', 'Подарок', 'Другое'],
-    expense: ['Транспорт', 'Еда', 'Продукты', 'Одежда']
+    income: ['Пополнение', 'Зарплата', 'Перевод', 'Подарок', 'Другое'],
+    expense: ['Трата', 'Транспорт', 'Еда', 'Продукты', 'Одежда', 'Подписки', 'Другое']
 };
 
 // Заполнение категорий
