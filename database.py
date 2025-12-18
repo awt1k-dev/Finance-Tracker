@@ -233,3 +233,9 @@ class Database:
         except Exception as e:
             conn.close()
             return (False, str(e))
+
+    def get_last_user_transaction(self, user_id):
+        conn = self.get_conn()
+        conn.row_factory = sqlite3.Row
+        tx = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY tx_id DESC LIMIT 1", (user_id, )).fetchone()
+        return dict(tx)

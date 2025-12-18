@@ -56,14 +56,14 @@
         <div class="stat-card">
             <span class="label">Balance</span>
             {% if user_data.balance < 0 %}
-                <span class="value-low">{{ user_data.balance }}</span>
+                <span class="value-low" id="user-balance">{{ user_data.balance }}</span>
             {% else %}
-                <span class="value">{{ user_data.balance }}</span>
+                <span class="value" id="user-balance">{{ user_data.balance }}</span>
             {% endif %}
         </div>
         <div class="stat-card">
             <span class="label">Transactions</span>
-            <span class="value">{{ transactions_count }}</span>
+            <span class="value" id="transactions-count">{{ transactions_count }}</span>
         </div>
     </section>
 

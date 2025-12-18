@@ -109,7 +109,8 @@ body {
 
 @keyframes shimmer {
     0% { background-position: -1000px 0; }
-    100% { background-position: 1000px 0; }
+    50% { background-position: 1000px 0; }
+    100% { background-position: -1000px 0; }
 }
 
 /* Контейнер с анимацией появления */
@@ -240,7 +241,7 @@ body {
     height: 200%;
     background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
     transform: rotate(45deg);
-    animation: shimmer 3s infinite linear;
+    animation: shimmer 6s infinite linear;
 }
 
 .stat-card:hover {
@@ -847,4 +848,26 @@ input[type="number"] {
         min-width: unset;
         max-width: unset;
     }
+}
+
+
+/* Анимация обновления статистики */
+@keyframes scalePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+.value, .value-low {
+    transition: transform 0.3s ease;
+}
+
+/* Анимация для новой строки таблицы */
+@keyframes highlightRow {
+    0% { background-color: rgba(76, 255, 154, 0.1); }
+    100% { background-color: transparent; }
+}
+
+tr.new-transaction {
+    animation: highlightRow 1s ease;
 }

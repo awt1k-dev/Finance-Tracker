@@ -1,7 +1,7 @@
 #####################################
 #            MODULES
 #####################################
-from flask import Flask, redirect, url_for, request, session, render_template, flash
+from flask import Flask, redirect, url_for, request, session, render_template, flash, jsonify
 from dotenv import load_dotenv
 load_dotenv()
 import os
@@ -170,7 +170,6 @@ def logout():
 #####################################
 #            Transactions
 #####################################
-
 @app.route("/transaction/add", methods=["POST"])
 @limiter.limit("2 per second")
 def create_transaction():
@@ -194,33 +193,78 @@ def create_transaction():
     #     Logic
     ####################
     result = database.create_transaction(session["user_id"], type, amount, category, note)
-    if result:
-        flash("Transaction succesfully added!", "success")
-        return redirect(url_for("profile"))
-    else:
-        flash(result[1], "error")
-        return redirect(url_for("profile"))
+    if result[0]:
+        if result[0]:
+            # Если AJAX запрос
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                user_data = database.get_user_for_profile(session.get("user_id"))
+                user_transactions = database.get_all_user_transactions(session.get("user_id"))
+                transactions_count = len(user_transactions) if user_transactions else 0
+                
+                # Получаем последнюю добавленную транзакцию (предполагаем, что она первая в списке)
+                last_transaction = database.get_last_user_transaction(session["user_id"])
+                
+                return jsonify({
+                    'success': True,
+                    'message': 'Транзакция успешно добавлена!',
+                    'balance': user_data['balance'],
+                    'transactions_count': transactions_count,
+                    'transaction': {
+                        'tx_id': last_transaction['tx_id'] if last_transaction else None,
+                        'type': last_transaction['type'] if last_transaction else None,
+                        'amount': last_transaction['amount'] if last_transaction else None,
+                        'category': last_transaction['category'] if last_transaction else None,
+                        'note': last_transaction['note'] if last_transaction else None,
+                        'created_at': last_transaction['created_at'] if last_transaction else None
+                    }
+                })
+            else:
+                flash("Транзакция успешно добавлена!", "success")
+                return redirect(url_for("profile"))
+        else:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return jsonify({'success': False, 'message': result[1]}), 400
+            else:
+                flash(result[1], "error")
+                return redirect(url_for("profile"))
     
 
 @app.route("/transaction/delete/<int:tx_id>", methods=["POST"])
 @limiter.limit("2 per second")
 def delete_transaction(tx_id):
     if not "user_id" in session:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'success': False, 'message': 'Не авторизован'}), 401
         return redirect(url_for("login"))
     
     if not database.check_user_transaction_access(session.get("user_id"), tx_id):
-        print("decline")
-        return redirect(url_for("profile"))
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'success': False, 'message': 'Нет доступа к этой транзакции'}), 403
+        else:
+            return redirect(url_for("profile"))
     
     result = database.remove_transaction(tx_id)
     if result[0]:
-        flash("Transaction succesfully removed!", "success")
-        print(1)
-        return redirect(url_for("profile"))
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            user_data = database.get_user_for_profile(session.get("user_id"))
+            user_transactions = database.get_all_user_transactions(session.get("user_id"))
+            transactions_count = len(user_transactions) if user_transactions else 0
+            
+            return jsonify({
+                'success': True,
+                'message': 'Транзакция успешно удалена!',
+                'balance': user_data['balance'],
+                'transactions_count': transactions_count
+            })
+        else:
+            flash("Транзакция успешно удалена!", "success")
+            return redirect(url_for("profile"))
     else:
-        flash(result[1], "error")
-        print(result[1])
-        return redirect(url_for("profile"))
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return jsonify({'success': False, 'message': result[1]}), 400
+        else:
+            flash(result[1], "error")
+            return redirect(url_for("profile"))
 
 #####################################
 #            Admin-panel
