@@ -10,6 +10,7 @@ from datetime import timedelta
 
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+import time
 
 ###########################################
 #            Application settings
@@ -19,6 +20,7 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv("secret")
 app.permanent_session_lifetime = timedelta(days=14)
+app.config['VERSION'] = int(time.time())  # Таймстамп при запуске
 
 #####################################
 #        Requests limiter

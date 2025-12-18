@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>awtik-cash</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home_style.css') }}?v={{ config['VERSION'] }}">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />

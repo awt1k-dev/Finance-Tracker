@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin panel — awtik-cash</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_style.css') }}?v={{ config['VERSION'] }}">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
@@ -28,7 +28,8 @@
 
     <header class="admin-header">
         <h1>Admin panel</h1>
-        <a href="{{ url_for('home') }}" class="back">← Home</a>
+         <a href="{{ url_for('profile') }}" class="back">Profile</a>
+         <a href="{{ url_for('home') }}" class="back">← Home</a>
     </header>
 
     <section class="users">
@@ -79,7 +80,16 @@
     </section>
 
 </div>
-<script src="{{ url_for('static', filename='js/profile.js') }}"></script>
-
+<script>
+        window.addEventListener('load', function() {
+            const preloader = document.querySelector('.preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.visibility = 'hidden';
+                preloader.style.transition = 'opacity 0.5s ease, visibility 0.5s ease';
+            }, 500);
+        });
+    </script>
+    <script src="{{ url_for('static', filename='js/admin.js') }}?v={{ config['VERSION'] }}"></script>
 </body>
 </html>

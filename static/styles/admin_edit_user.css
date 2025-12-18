@@ -1,3 +1,46 @@
+/* Плавные переходы для всей страницы */
+html {
+    scroll-behavior: smooth;
+}
+
+html {
+    background-color: #030303;
+}
+
+/* Основные анимации */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -6,17 +49,27 @@
 }
 
 body {
-    background: #000;
+    background: linear-gradient(135deg, #000000 0%, #0a0a0a 25%, #000000 50%, #0a0a0a 75%, #000000 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 20s ease infinite;
     color: #fff;
     min-height: 100vh;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
 }
 
 .container {
     width: 100%;
     max-width: 520px;
     padding: 40px 24px 80px;
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Header */
@@ -24,99 +77,434 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 40px;
+    animation: slideInRight 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s both;
 }
 
 .edit-header h1 {
     font-size: 32px;
+    background: linear-gradient(90deg, #fff, #aaa, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s infinite linear;
+}
+
+@keyframes shimmer {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
 }
 
 .back {
-    color: #777;
+    color: #aaa;
     text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    animation: slideInLeft 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
 }
 
 .back:hover {
-    color: #aaa;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
 }
 
 /* Form */
 .edit-form {
-    background: #111;
-    border: 1px solid #222;
-    border-radius: 16px;
-    padding: 24px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 32px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
+    backdrop-filter: blur(10px);
+    animation: fadeInUp 0.6s ease 0.5s both;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
 .form-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 label {
-    font-size: 12px;
-    color: #666;
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
 }
 
 input,
 select {
-    padding: 12px 14px;
-    border-radius: 10px;
-    border: 1px solid #222;
-    background: #0f0f0f;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     color: #fff;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+/* Кастомный селект для роли */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select__trigger {
+    position: relative;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 52px;
+}
+
+.custom-select__trigger:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.custom-select__trigger .arrow {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-select.open .custom-select__trigger .arrow {
+    transform: rotate(180deg);
+}
+
+.custom-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-options::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+}
+
+.custom-options::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.custom-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.custom-option {
+    padding: 14px 16px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     font-size: 14px;
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding-left: 20px;
+}
+
+.custom-option.selected {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    position: relative;
+}
+
+.custom-option.selected::after {
+    content: '✓';
+    position: absolute;
+    right: 16px;
+    color: #4cff9a;
+}
+
+/* Скрываем нативный select */
+.edit-form select[name="role"] {
+    display: none;
 }
 
 input:focus,
 select:focus {
     outline: none;
-    border-color: #444;
-    background: #141414;
+    border-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
 }
 
-/* Readonly */
+/* Readonly поля */
 input[readonly] {
     opacity: 0.7;
     cursor: not-allowed;
+    background: rgba(255, 255, 255, 0.02);
+    border-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Balance colors */
+/* Цвета для баланса */
 input.negative {
     color: #ff6b6b;
+    font-weight: 600;
 }
 
 input.positive {
     color: #4cff9a;
+    font-weight: 600;
 }
 
-/* Submit */
+/* Submit button */
 .submit-btn {
-    margin-top: 8px;
-    padding: 14px;
+    margin-top: 20px;
+    padding: 16px;
     border-radius: 12px;
-    border: 1px solid #333;
-    background: transparent;
-    color: #fff;
-    font-size: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(76, 255, 154, 0.1);
+    color: #4cff9a;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.2s ease;
+    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
 }
 
 .submit-btn:hover {
-    background: #1a1a1a;
+    background: rgba(76, 255, 154, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(76, 255, 154, 0.3);
 }
 
 .submit-btn:active {
-    transform: scale(0.97);
+    transform: translateY(-1px);
+    transition: all 0.2s ease;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(76, 255, 154, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+/* Статистика пользователя */
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.user-stat {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.user-stat:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.user-stat-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.user-stat-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Исправления для кастомного селекта на странице редактирования */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.custom-select__trigger {
+    position: relative;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 52px;
+}
+
+.custom-select__trigger:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.custom-select__trigger .arrow {
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.custom-select.open .custom-select__trigger .arrow {
+    transform: rotate(180deg);
+}
+
+.custom-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    border-radius: 12px;
+    background: rgba(20, 20, 20, 0.98);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.custom-options::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-options::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 3px;
+}
+
+.custom-options::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.custom-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.custom-select.open .custom-options {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.custom-option {
+    padding: 14px 16px;
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 14px;
+}
+
+.custom-option:last-child {
+    border-bottom: none;
+}
+
+.custom-option:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    padding-left: 20px;
+}
+
+.custom-option.selected {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    position: relative;
+}
+
+.custom-option.selected::after {
+    content: '✓';
+    position: absolute;
+    right: 16px;
+    color: #4cff9a;
+}
+
+/* Скрываем нативный select */
+.edit-form select[name="role"] {
+    display: none;
 }
 
 /* Mobile */
-@media (max-width: 480px) {
+@media (max-width: 768px) {
     .container {
         padding: 24px 16px 60px;
     }
@@ -124,6 +512,43 @@ input.positive {
     .edit-header {
         flex-direction: column;
         align-items: flex-start;
+        gap: 20px;
+    }
+
+    .back {
+        align-self: stretch;
+        text-align: center;
+    }
+
+    .edit-form {
+        padding: 24px;
+    }
+
+    .user-stats {
+        grid-template-columns: 1fr;
         gap: 12px;
     }
 }
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 12px 50px;
+    }
+
+    .edit-header h1 {
+        font-size: 28px;
+    }
+
+    input,
+    select,
+    .custom-select__trigger {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    .submit-btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+}
+
