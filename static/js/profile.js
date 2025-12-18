@@ -554,23 +554,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // ================= 6. АНИМАЦИЯ СТАТИСТИКИ =================
     const statsCards = document.querySelectorAll('.stat-card');
+    let statsAnimated = false; // Флаг для отслеживания, была ли уже анимация
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                //entry.target.classList.add('animated');
+            if (entry.isIntersecting && !statsAnimated) {
+                statsAnimated = true; // Устанавливаем флаг, чтобы анимация больше не повторялась
                 
                 // Анимация счетов
                 const valueElement = entry.target.querySelector('.value, .value-low');
                 if (valueElement) {
                     const finalValue = parseInt(valueElement.textContent);
                     if (!isNaN(finalValue)) {
+                        // Сохраняем исходное значение перед анимацией
+                        valueElement.dataset.originalValue = valueElement.textContent;
                         animateCounter(valueElement, finalValue, 2000);
                     }
                 }
             }
         });
     }, { threshold: 0.1 });
-    
+
     statsCards.forEach(card => observer.observe(card));
 
     // ================= 7. ЭФФЕКТ ПАРАЛЛАКСА =================
