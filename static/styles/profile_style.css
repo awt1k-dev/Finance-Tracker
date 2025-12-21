@@ -720,6 +720,7 @@ input[type="number"] { -moz-appearance: textfield; }
 @media (max-width: 480px) {
     .container {
         padding: 20px 12px 60px; /* Уменьшили боковые отступы контейнера */
+        max-width: 480px;
     }
 
     .profile-header h1 {
@@ -737,6 +738,8 @@ input[type="number"] { -moz-appearance: textfield; }
     /* Делаем форму компактнее на маленьких экранах */
     .transaction-form {
         padding: 16px;
+        max-width: 460px;
+        margin-right: 10px;
     }
 
     .transaction-form button {
@@ -754,5 +757,11 @@ input[type="number"] { -moz-appearance: textfield; }
     .toast {
         min-width: unset;
         max-width: unset;
+    }
+    table {
+        max-width: 480px;
+    }
+    .table-wrapper {
+        max-width: 480px;
     }
 }
