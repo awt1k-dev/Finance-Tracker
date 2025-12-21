@@ -493,7 +493,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const formattedDate = formatDate(transaction.created_at);
         
         newRow.innerHTML = `
-            <td>${transaction.type}</td>
             <td>${transaction.amount}</td>
             <td>${transaction.category}</td>
             <td>${transaction.note || '-'}</td>

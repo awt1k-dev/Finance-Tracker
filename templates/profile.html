@@ -78,7 +78,6 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Type</th>
                             <th>Amount</th>
                             <th>Category</th>
                             <th>Note</th>
@@ -89,7 +88,6 @@
                     <tbody>
                     {% for tx in transactions %}
                         <tr class="{{ 'income' if tx.type == 'income' else 'expense' }}">
-                            <td>{{ tx.type }}</td>
                             <td>{{ tx.amount }}</td>
                             <td>{{ tx.category }}</td>
                             <td>{{ tx.note or '-' }}</td>
