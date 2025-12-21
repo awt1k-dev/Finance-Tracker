@@ -764,4 +764,47 @@ input[type="number"] { -moz-appearance: textfield; }
     .table-wrapper {
         max-width: 480px;
     }
+    .table-wrapper {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        max-width: 100%;
+        table-layout: fixed;
+    }
+    tr.income td:nth-child(2),
+    tr.expense td:nth-child(2) {
+        padding-left: 24px;
+        position: relative;
+    }
+
+    tr.income td:nth-child(2)::before {
+        content: '+';
+        position: absolute;
+        left: 8px;
+    }
+
+    tr.expense td:nth-child(2)::before {
+        content: '−';
+        position: absolute;
+        left: 8px;
+    }
+    body {
+        overflow-x: hidden;
+    }
+
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    th, td {
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 }
