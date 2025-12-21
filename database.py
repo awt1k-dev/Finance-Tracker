@@ -36,13 +36,14 @@ class Database:
     ##################################################################
     #                         Users
     ##################################################################
-    
-    def user_in_db(self, username, email) -> tuple[bool, str]:
+    def user_in_db(self, username: str, email: str) -> tuple[bool, str]:
         """Return (True, "Username") - if username in db. (True, "Email") if email in db. (False, None) - else"""
         conn = self.get_conn()
+        # Check user and email exists
         user_username = conn.execute("SELECT id FROM users WHERE username = ?", (username, )).fetchone()
         user_email = conn.execute("SELECT id FROM users WHERE email = ?", (email, )).fetchone()
         conn.close()
+        # Returning info
         if user_username:
             return (True, "Username")
         elif user_email:
@@ -50,27 +51,21 @@ class Database:
         else:
             return (False, None)
     
-    def check_user_password_username(self, username, password) -> bool:
-        """Return True if correct pass else False"""
+    def check_user_password(self, login: str, password: str) -> bool:
         conn = self.get_conn()
-        user_password = conn.execute("SELECT password_hash FROM users WHERE username = ?", (username, )).fetchone()
+        # Check login type and getting user
+        if "@" in login:
+            user_password = conn.execute("SELECT password_hash FROM users WHERE email = ?", (login, )).fetchone()
+        else:
+            user_password = conn.execute("SELECT password_hash FROM users WHERE username = ?", (login, )).fetchone()
         conn.close()
+        # Checking password
         if check_password_hash(user_password[0], password):
             return True
         else:
             return False
     
-    def check_user_password_email(self, email, password) -> bool:
-        """Return True if correct pass else False"""
-        conn = self.get_conn()
-        user_password = conn.execute("SELECT password_hash FROM users WHERE email = ?", (email, )).fetchone()
-        conn.close()
-        if check_password_hash(user_password[0], password):
-            return True
-        else:
-            return False
-    
-    def create_user(self, username, email, password) -> tuple[bool, str]:
+    def create_user(self, username: str, email: str, password: str) -> tuple[bool, str]:
         """Return tuple (True, "Succes") - if success. (False, Error) - else"""
         conn = self.get_conn()
         try:
@@ -83,21 +78,19 @@ class Database:
             conn.close()
             return (False, str(e))
 
-    def get_user_for_login_username(self, username) -> tuple:
+    def get_user_id(self, login: str) -> int:
         """Return tuple (id, username, email)"""
         conn = self.get_conn()
-        user_data = conn.execute("SELECT id, username, email FROM users WHERE username = ?", (username, )).fetchone()
+        # Getting user info
+        if "@" in login:
+            user_id = conn.execute("SELECT id FROM users WHERE email = ?", (login, )).fetchone()
+        else:
+            user_id = conn.execute("SELECT id FROM users WHERE username = ?", (login, )).fetchone()
         conn.close()
-        return user_data
+        return int(user_id[0])
+
     
-    def get_user_for_login_email(self, email) -> tuple:
-        """Return tuple (id, username, email)"""
-        conn = self.get_conn()
-        user_data = conn.execute("SELECT id, username, email FROM users WHERE email = ?", (email, )).fetchone()
-        conn.close()
-        return user_data
-    
-    def get_user_for_profile(self, user_id) -> tuple[str, str, int]:
+    def get_user_for_profile(self, user_id: int) -> tuple[str, str, int]:
         """Returning [username, email, balance]"""
         conn = self.get_conn()
         conn.row_factory = sqlite3.Row
@@ -108,7 +101,7 @@ class Database:
     #                         Transactions
     ##################################################################
     
-    def get_all_user_transactions(self, user_id) -> list[sqlite3.Row]:
+    def get_all_user_transactions(self, user_id: int) -> list[sqlite3.Row]:
         """Returning list of transactions. Work with row looks like: 
         ```data = get_all_user_transactions(10)
         for row in data:
@@ -118,19 +111,19 @@ class Database:
         transactions = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC", (user_id, )).fetchall()
         return transactions
     
-    def check_user_transaction_access(self, user_id, tx_id) -> bool:
+    def check_user_transaction_access(self, user_id: int, tx_id: int) -> bool:
         """Checking is user the owner of transaction
         ```True | False"""
         conn = self.get_conn()
+        # If tx with current id and current user id exists - user have access
         data = conn.execute("SELECT tx_id, user_id FROM transactions WHERE tx_id = ? AND user_id = ?", (tx_id, user_id)).fetchone()
         conn.close()
-        print(data)
         if data:
             return True
         else:
             return False
     
-    def remove_transaction(self, tx_id) -> tuple[bool, str]:
+    def remove_transaction(self, tx_id: int) -> tuple[bool, str]:
         try:
             conn = self.get_conn()
             user_id = conn.execute("SELECT user_id FROM transactions WHERE tx_id = ?", (tx_id, )).fetchone()[0]
@@ -142,7 +135,7 @@ class Database:
         except Exception as e:
             return (False, f"Error: {e}")
     
-    def create_transaction(self, user_id, type, amount, category, note) -> tuple[bool, str]:
+    def create_transaction(self, user_id: int, type: str, amount: int, category: str, note: str | None) -> tuple[bool, str]:
         now = datetime.datetime.now().isoformat(sep=" ", timespec="seconds") # CUrrent date in iso format
         try:
             conn = self.get_conn()
@@ -155,12 +148,12 @@ class Database:
         except Exception as e:
             return (False, f"Error: {e}")
         
-    def get_current_balance(self, user_id) -> int:
+    def get_current_balance(self, user_id: int) -> int:
         conn = self.get_conn()
         balance = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id, )).fetchone()[0]
         return balance
     
-    def calculate_new_balance(self, user_id):
+    def calculate_new_balance(self, user_id: int):
         """Updating balance column in db for current user"""
         conn = self.get_conn()
         incomes = []
@@ -176,7 +169,7 @@ class Database:
         conn.commit()
         conn.close()
 
-    def get_user_role(self, user_id) -> str:
+    def get_user_role(self, user_id: int) -> str:
         conn = self.get_conn()
         role = conn.execute("SELECT role FROM users WHERE id = ?", (user_id, )).fetchone()[0]
         conn.close()
@@ -222,7 +215,7 @@ class Database:
             conn.close()
             return (False, str(e))
     
-    def delete_user(self, user_id):
+    def delete_user(self, user_id: int) -> tuple[bool, str]:
         conn = self.get_conn()
         try:
             conn.execute("DELETE FROM users WHERE id=?", (user_id, ))
@@ -234,7 +227,7 @@ class Database:
             conn.close()
             return (False, str(e))
 
-    def get_last_user_transaction(self, user_id):
+    def get_last_user_transaction(self, user_id: int) -> dict:
         conn = self.get_conn()
         conn.row_factory = sqlite3.Row
         tx = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY tx_id DESC LIMIT 1", (user_id, )).fetchone()
