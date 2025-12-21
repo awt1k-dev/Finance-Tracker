@@ -1,8 +1,12 @@
+/* =========================================
+   1. BASE & RESET
+   ========================================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -20,13 +24,81 @@ body {
     overflow-x: hidden;
 }
 
+/* =========================================
+   2. ANIMATIONS
+   ========================================= */
 @keyframes gradientShift {
     0% { background-position: 0% 0%; }
     50% { background-position: 100% 100%; }
     100% { background-position: 0% 0%; }
 }
 
-/* Прелоадер для профиля */
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+    0% { background-position: -1000px 0; }
+    50% { background-position: 1000px 0; }
+    100% { background-position: -1000px 0; }
+}
+
+@keyframes slideOutLeft {
+    from { opacity: 1; transform: translateX(0); }
+    to { opacity: 0; transform: translateX(-100px); }
+}
+
+@keyframes scalePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+@keyframes highlightRow {
+    0% { background-color: rgba(76, 255, 154, 0.1); }
+    100% { background-color: transparent; }
+}
+
+@keyframes toast-in {
+    from { opacity: 0; transform: translateX(100px) scale(0.9) rotate(5deg); }
+    to { opacity: 1; transform: translateX(0) scale(1) rotate(0); }
+}
+
+@keyframes toast-out {
+    from { opacity: 1; transform: translateX(0) scale(1); }
+    to { opacity: 0; transform: translateX(100px) scale(0.9); }
+}
+
+/* =========================================
+   3. PRELOADER
+   ========================================= */
 .preloader {
     position: fixed;
     top: 0;
@@ -57,63 +129,9 @@ body {
 .spinner-circle:nth-child(1) { animation-delay: -0.32s; }
 .spinner-circle:nth-child(2) { animation-delay: -0.16s; }
 
-@keyframes bounce {
-    0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
-    40% { transform: scale(1); opacity: 1; }
-}
-
-/* Основные анимации */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-}
-
-@keyframes shimmer {
-    0% { background-position: -1000px 0; }
-    50% { background-position: 1000px 0; }
-    100% { background-position: -1000px 0; }
-}
-
-/* Контейнер с анимацией появления */
+/* =========================================
+   4. LAYOUT
+   ========================================= */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -121,7 +139,16 @@ body {
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* ================= HEADER ================= */
+.content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 40px;
+    animation: fadeInUp 0.6s ease 0.8s both;
+}
+
+/* =========================================
+   5. HEADER
+   ========================================= */
 .profile-header {
     display: flex;
     justify-content: space-between;
@@ -152,7 +179,6 @@ body {
     animation: slideInLeft 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s both;
 }
 
-/* Кнопки с эффектами */
 .action-btn {
     padding: 12px 20px;
     border-radius: 12px;
@@ -164,6 +190,7 @@ body {
     transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
     position: relative;
     overflow: hidden;
+    color: #fff;
 }
 
 .action-btn::before {
@@ -177,15 +204,10 @@ body {
     transition: left 0.5s ease;
 }
 
-.action-btn:hover::before {
-    left: 100%;
-}
+.action-btn:hover::before { left: 100%; }
+.action-btn:active { transform: translateY(-1px); transition: all 0.2s ease; }
 
-.action-btn.admin {
-    color: #aaa;
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05);
-}
-
+.action-btn.admin { color: #aaa; box-shadow: 0 4px 15px rgba(255, 255, 255, 0.05); }
 .action-btn.admin:hover {
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
@@ -193,24 +215,16 @@ body {
     transform: translateY(-3px);
 }
 
-.action-btn.logout {
-    color: #ff6b6b;
-    border-color: rgba(255, 107, 107, 0.2);
-    background: rgba(255, 107, 107, 0.05);
-}
-
+.action-btn.logout { color: #ff6b6b; border-color: rgba(255, 107, 107, 0.2); background: rgba(255, 107, 107, 0.05); }
 .action-btn.logout:hover {
     background: rgba(255, 107, 107, 0.1);
     box-shadow: 0 8px 25px rgba(255, 107, 107, 0.2);
     transform: translateY(-3px);
 }
 
-.action-btn:active {
-    transform: translateY(-1px);
-    transition: all 0.2s ease;
-}
-
-/* ================= STATS ================= */
+/* =========================================
+   6. STATS
+   ========================================= */
 .stats {
     display: flex;
     gap: 20px;
@@ -247,9 +261,7 @@ body {
 .stat-card:hover {
     transform: translateY(-8px) scale(1.02);
     border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 20px 40px rgba(0, 0, 0, 0.3),
-        0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .stat-card:nth-child(1) { animation-delay: 0.5s; }
@@ -272,6 +284,7 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    transition: transform 0.3s ease;
 }
 
 .value-low {
@@ -279,17 +292,12 @@ body {
     font-weight: 600;
     color: #ff6b6b;
     animation: pulse 2s infinite;
+    transition: transform 0.3s ease;
 }
 
-/* ================= LAYOUT ================= */
-.content {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: 40px;
-    animation: fadeInUp 0.6s ease 0.8s both;
-}
-
-/* ================= TRANSACTIONS ================= */
+/* =========================================
+   7. TRANSACTIONS TABLE
+   ========================================= */
 .transactions h2 {
     font-size: 24px;
     margin-bottom: 24px;
@@ -303,6 +311,7 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     animation: fadeInUp 0.6s ease 1s both;
+    -webkit-overflow-scrolling: touch;
 }
 
 table {
@@ -312,9 +321,7 @@ table {
     overflow: hidden;
 }
 
-thead {
-    background: rgba(255, 255, 255, 0.05);
-}
+thead { background: rgba(255, 255, 255, 0.05); }
 
 th, td {
     padding: 18px 20px;
@@ -341,33 +348,15 @@ tr:hover {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-tr.income td:nth-child(2) {
-    color: #4cff9a;
-    position: relative;
-}
+tr.income td:nth-child(2) { color: #4cff9a; position: relative; }
+tr.income td:nth-child(2)::before { content: '+'; position: absolute; left: -15px; }
 
-tr.income td:nth-child(2)::before {
-    content: '+';
-    position: absolute;
-    left: -15px;
-}
+tr.expense td:nth-child(2) { color: #ff6b6b; position: relative; }
+tr.expense td:nth-child(2)::before { content: '−'; position: absolute; left: -15px; }
 
-tr.expense td:nth-child(2) {
-    color: #ff6b6b;
-    position: relative;
-}
+tr.new-transaction { animation: highlightRow 1s ease; }
 
-tr.expense td:nth-child(2)::before {
-    content: '−';
-    position: absolute;
-    left: -15px;
-}
-
-/* Delete button */
-.delete-cell {
-    width: 50px;
-    text-align: center;
-}
+.delete-cell { width: 50px; text-align: center; }
 
 .delete-btn {
     background: none;
@@ -390,19 +379,17 @@ tr.expense td:nth-child(2)::before {
     transform: rotate(90deg) scale(1.1);
 }
 
-/* Анимация удаления строки */
-@keyframes slideOutLeft {
-    from {
-        opacity: 1;
-        transform: translateX(0);
-    }
-    to {
-        opacity: 0;
-        transform: translateX(-100px);
-    }
+.empty {
+    color: #666;
+    text-align: center;
+    padding: 40px;
+    font-size: 16px;
+    animation: fadeInUp 0.6s ease;
 }
 
-/* ================= CREATE TRANSACTION ================= */
+/* =========================================
+   8. CREATE TRANSACTION FORM
+   ========================================= */
 .create-transaction h2 {
     font-size: 22px;
     margin-bottom: 24px;
@@ -423,6 +410,7 @@ tr.expense td:nth-child(2)::before {
 
 .transaction-form input,
 .transaction-form textarea {
+    width: 100%; /* Убедимся, что инпуты не вылезают */
     padding: 14px 16px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -432,10 +420,23 @@ tr.expense td:nth-child(2)::before {
     transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Кастомный стилизованный select */
+.transaction-form input:focus,
+.transaction-form textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Custom Select */
 .transaction-form .custom-select {
     position: relative;
     width: 100%;
+}
+
+.transaction-form select {
+    display: none;
 }
 
 .custom-select__trigger {
@@ -490,23 +491,10 @@ tr.expense td:nth-child(2)::before {
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
 
-.custom-options::-webkit-scrollbar {
-    width: 6px;
-}
-
-.custom-options::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 3px;
-}
-
-.custom-options::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
-    border-radius: 3px;
-}
-
-.custom-options::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
+.custom-options::-webkit-scrollbar { width: 6px; }
+.custom-options::-webkit-scrollbar-track { background: transparent; border-radius: 3px; }
+.custom-options::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+.custom-options::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.3); }
 
 .custom-select.open .custom-options {
     opacity: 1;
@@ -523,44 +511,12 @@ tr.expense td:nth-child(2)::before {
     font-size: 14px;
 }
 
-.custom-option:last-child {
-    border-bottom: none;
-}
+.custom-option:last-child { border-bottom: none; }
+.custom-option:hover { background: rgba(255, 255, 255, 0.05); color: #fff; padding-left: 20px; }
+.custom-option.selected { background: rgba(255, 255, 255, 0.08); color: #fff; position: relative; }
+.custom-option.selected::after { content: '✓'; position: absolute; right: 16px; color: #4cff9a; }
 
-.custom-option:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #fff;
-    padding-left: 20px;
-}
-
-.custom-option.selected {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    position: relative;
-}
-
-.custom-option.selected::after {
-    content: '✓';
-    position: absolute;
-    right: 16px;
-    color: #4cff9a;
-}
-
-/* Скрываем нативный select */
-.transaction-form select {
-    display: none;
-}
-
-.transaction-form input:focus,
-.transaction-form textarea:focus {
-    outline: none;
-    border-color: rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-/* Кастомная категория */
+/* Custom Category Field */
 #custom-category {
     display: none;
     opacity: 0;
@@ -575,17 +531,12 @@ tr.expense td:nth-child(2)::before {
     animation: fadeInUp 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-/* Hide number arrows */
+/* Remove number arrows */
 input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-input[type="number"] {
-    -moz-appearance: textfield;
-}
+input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; }
 
-/* Button */
+/* Form Button */
 .transaction-form button {
     margin-top: 10px;
     padding: 16px;
@@ -606,9 +557,7 @@ input[type="number"] {
     box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
 }
 
-.transaction-form button:active {
-    transform: translateY(-1px);
-}
+.transaction-form button:active { transform: translateY(-1px); }
 
 .transaction-form button::after {
     content: '';
@@ -624,11 +573,9 @@ input[type="number"] {
     transform-origin: 50% 50%;
 }
 
-.transaction-form button:active::after {
-    animation: ripple 0.6s ease-out;
-}
+.transaction-form button:active::after { animation: ripple 0.6s ease-out; }
 
-/* ================= TYPE SWITCH ================= */
+/* Type Switch */
 .type-switch {
     display: flex;
     gap: 10px;
@@ -655,12 +602,8 @@ input[type="number"] {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.type-btn:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.03);
-    color: #aaa;
-}
+.type-btn:hover:not(.active) { background: rgba(255, 255, 255, 0.03); color: #aaa; }
 
-/* Индикатор выбранного типа */
 .type-btn::after {
     content: '';
     position: absolute;
@@ -673,20 +616,11 @@ input[type="number"] {
     transition: width 0.3s ease;
 }
 
-.type-btn.active::after {
-    width: 80%;
-}
+.type-btn.active::after { width: 80%; }
 
-/* ================= MISC ================= */
-.empty {
-    color: #666;
-    text-align: center;
-    padding: 40px;
-    font-size: 16px;
-    animation: fadeInUp 0.6s ease;
-}
-
-/* ================= NOTIFICATIONS ================= */
+/* =========================================
+   9. NOTIFICATIONS
+   ========================================= */
 .notifications {
     position: fixed;
     top: 24px;
@@ -713,61 +647,28 @@ input[type="number"] {
     transform-origin: top right;
 }
 
-.toast.success { 
-    border-left: 4px solid #4cff9a;
-    background: rgba(30, 40, 30, 0.9);
-}
-.toast.error { 
-    border-left: 4px solid #ff6b6b;
-    background: rgba(40, 30, 30, 0.9);
-}
-.toast.warning { 
-    border-left: 4px solid #ffd36b;
-    background: rgba(40, 40, 30, 0.9);
-}
+.toast.success { border-left: 4px solid #4cff9a; background: rgba(30, 40, 30, 0.9); }
+.toast.error { border-left: 4px solid #ff6b6b; background: rgba(40, 30, 30, 0.9); }
+.toast.warning { border-left: 4px solid #ffd36b; background: rgba(40, 40, 30, 0.9); }
 
-@keyframes toast-in {
-    from { 
-        opacity: 0; 
-        transform: translateX(100px) scale(0.9) rotate(5deg);
-    }
-    to { 
-        opacity: 1; 
-        transform: translateX(0) scale(1) rotate(0);
-    }
-}
-
-@keyframes toast-out {
-    from { 
-        opacity: 1; 
-        transform: translateX(0) scale(1); 
-    }
-    to { 
-        opacity: 0; 
-        transform: translateX(100px) scale(0.9); 
-    }
-}
-
-/* ================= MOBILE ================= */
+/* =========================================
+   10. MOBILE & RESPONSIVE
+   ========================================= */
+/* Планшеты (схлопывание сетки в 1 колонку) */
 @media (max-width: 900px) {
     .content {
         grid-template-columns: 1fr;
         gap: 30px;
     }
-
     .create-transaction {
         order: -1;
     }
-    
     .stats {
         gap: 15px;
     }
-    
-    .custom-options {
-        max-height: 250px;
-    }
 }
 
+/* Мобильные телефоны */
 @media (max-width: 768px) {
     .container {
         padding: 24px 16px 60px;
@@ -775,45 +676,52 @@ input[type="number"] {
 
     .profile-header {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
         gap: 20px;
+        text-align: center;
     }
 
     .header-actions {
-        align-self: stretch;
-        justify-content: space-between;
+        flex-wrap: wrap;
+        justify-content: center;
     }
-
+    
     .action-btn {
         flex: 1;
+        min-width: 120px;
     }
 
     .stats {
         flex-direction: column;
-        gap: 15px;
     }
 
     .stat-card {
         width: 100%;
-        min-width: unset;
     }
 
     th, td {
         padding: 14px 16px;
         font-size: 13px;
     }
-    
+
+    /* Исправление формы на мобильных */
+    .transaction-form input,
+    .transaction-form textarea,
     .custom-select__trigger {
-        min-height: 48px;
-        padding: 12px 14px;
+        font-size: 16px; /* Защита от зума на iOS */
     }
     
-    .custom-option {
-        padding: 12px 14px;
+    .custom-select__trigger {
+        min-height: 50px;
     }
 }
 
+/* Маленькие экраны (iPhone SE и т.д.) - исправление 480px */
 @media (max-width: 480px) {
+    .container {
+        padding: 20px 12px 60px; /* Уменьшили боковые отступы контейнера */
+    }
+
     .profile-header h1 {
         font-size: 28px;
     }
@@ -821,53 +729,30 @@ input[type="number"] {
     .stat-card {
         padding: 20px;
     }
-
+    
     .value, .value-low {
         font-size: 20px;
     }
 
-    .transaction-form input,
-    .transaction-form textarea {
-        padding: 12px 14px;
-        font-size: 14px;
+    /* Делаем форму компактнее на маленьких экранах */
+    .transaction-form {
+        padding: 16px;
     }
 
     .transaction-form button {
         padding: 14px;
-        font-size: 15px;
     }
 
+    /* Уведомления на весь экран */
     .notifications {
-        left: 16px;
-        right: 16px;
-        top: 16px;
+        left: 12px;
+        right: 12px;
+        top: 12px;
         align-items: stretch;
     }
-
+    
     .toast {
         min-width: unset;
         max-width: unset;
     }
-}
-
-
-/* Анимация обновления статистики */
-@keyframes scalePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}
-
-.value, .value-low {
-    transition: transform 0.3s ease;
-}
-
-/* Анимация для новой строки таблицы */
-@keyframes highlightRow {
-    0% { background-color: rgba(76, 255, 154, 0.1); }
-    100% { background-color: transparent; }
-}
-
-tr.new-transaction {
-    animation: highlightRow 1s ease;
 }

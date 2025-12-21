@@ -152,6 +152,7 @@ def profile():
     transactions_count = len(user_transactions) if user_transactions else 0
     user_data = database.get_user_for_profile(session.get("user_id"))
     user_role = database.get_user_role(session.get("user_id"))
+
     return render_template("profile.html", user_data=user_data, transactions=user_transactions, transactions_count=transactions_count, role=user_role)
 
 # Clear session
