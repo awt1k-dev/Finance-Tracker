@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 database.db
 .env
 __pycache__/
 *.pyc
+=======
+.env
+.db
+/__pycache__
+database.db
+make_admin.py
+test.py
+>>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c

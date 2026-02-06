@@ -149,6 +149,7 @@ body {
 /* =========================================
    5. HEADER
    ========================================= */
+<<<<<<< HEAD
 
 /* Кнопка Telegram в стиле action-btn */
 .action-btn.telegram { 
@@ -177,6 +178,8 @@ body {
     transform: translateY(-3px);
 }
 
+=======
+>>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
 .profile-header {
     display: flex;
     justify-content: space-between;
