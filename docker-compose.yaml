@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  # Контейнер для Flask
+  web:
+    build: .
+    command: python app.py
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./database.db:/app/database.db  # Мапим файл БД
+    env_file:
+      - .env
+    restart: always
+
+  # Контейнер для Бота
+  bot:
+    build: .
+    command: python bot.py
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
+    restart: always

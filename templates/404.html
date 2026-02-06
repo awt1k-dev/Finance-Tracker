@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Too Many Requests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/error.css') }}?v={{ config['VERSION'] }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+<div class="error-container">
+    <h1>404</h1>
+    <p class="title">Not Found :(</p>
+    <p class="desc">
+        We couldn't find this page in<br>
+        our safes
+    </p>
+
+    <a href="{{ url_for('home') }}" class="btn">Go home</a>
+    <a href="{{ url_for('profile') }}" class="btn">Profile</a>
+</div>
+</body>
+</html>

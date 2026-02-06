@@ -1,0 +1,54 @@
+/* Специальный акцент на токене */
+.token-card {
+    cursor: pointer;
+    text-align: center;
+    padding: 40px 20px !important;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.token-wrapper {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    display: inline-block;
+    min-width: 200px;
+}
+
+.token-card .value {
+    font-family: 'Monaco', 'Consolas', monospace;
+    letter-spacing: 4px;
+    font-size: 28px !important;
+    background: linear-gradient(90deg, #fff, #4cff9a, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 5s infinite linear;
+}
+
+.tap-hint {
+    font-size: 11px;
+    text-transform: uppercase;
+    color: #555;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+/* Анимация текста (копия твоей из профиля) */
+.shimmer-text {
+    background: linear-gradient(90deg, #fff, #888, #fff);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 8s infinite linear;
+}
+
+/* Фикс для мобилок */
+@media (max-width: 480px) {
+    .token-card .value {
+        font-size: 22px !important;
+        letter-spacing: 2px;
+    }
+}

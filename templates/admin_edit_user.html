@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit user — Admin panel</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/admin_edit_user.css') }}?v={{ config['VERSION'] }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+
+<div class="container">
+
+    <header class="edit-header">
+        <h1>Edit user</h1>
+        <a href="{{ url_for('admin') }}" class="back">← Back to admin</a>
+    </header>
+
+    <form class="edit-form" method="post">
+
+        <!-- ID -->
+        <div class="form-group">
+            <label>ID</label>
+            <input type="text" value="{{ id }}" readonly>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" name="username" value="{{ user.username }}" required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+        </div>
+
+        <!-- Balance -->
+        <div class="form-group">
+            <label>Balance</label>
+            <input type="text" value="{{ user.balance }}" readonly
+                class="{{ 'negative' if user.balance < 0 else 'positive' }}">
+        </div>
+
+        <!-- Transactions count -->
+        <div class="form-group">
+            <label>Transactions count</label>
+            <input type="text" value="{{ tx_count }}" readonly>
+        </div>
+
+        <!-- Role - кастомный селект -->
+        <div class="form-group">
+            <label>Role</label>
+            <div class="custom-select">
+                <select name="role" required style="display: none;">
+                    <option value="user" {{ 'selected' if role == 'user' }}>User</option>
+                    <option value="moderator" {{ 'selected' if role == 'moderator' }}>Moderator</option>
+                    <option value="admin" {{ 'selected' if role == 'admin' }}>Admin</option>
+                </select>
+                <div class="custom-select__trigger">
+                    <span>{{ role|capitalize }}</span>
+                    <div class="arrow">▼</div>
+                </div>
+                <div class="custom-options">
+                    <!-- Options populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-btn">Сохранить изменения</button>
+    </form>
+
+</div>
+<script src="{{ url_for('static', filename='js/admin.js') }}?v={{ config['VERSION'] }}"></script>
+
+</body>
+</html>

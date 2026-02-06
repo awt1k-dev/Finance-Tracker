@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile — awtik-cash</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile_style.css') }}?v={{ config['VERSION'] }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+
+    <div class="notifications">
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, message in messages %}
+                <div class="toast {{ cat }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endwith %}
+    </div>
+
+<div class="container">
+
+    <header class="profile-header">
+        <div class="profile-title">
+            <h1>Profile</h1>
+            <p class="username">@{{ user_data.username }}</p>
+        </div>
+
+        <div class="header-actions">
+            {% if role == 'admin' %}
+            <form action="{{ url_for('admin') }}" method="get">
+                <button type="submit" class="action-btn admin">Admin panel</button>
+            </form>
+            {% endif %}
+
+            {% if tg_verify %}
+            <form action="{{ url_for('unlink_telegram') }}" method="get">
+                <button type="submit" class="action-btn unlink-telegram">Unlink Telegram</button>
+            </form>
+            {% else %}
+            <form action="{{ url_for('telegram_token') }}" method="get">
+                <button type="submit" class="action-btn telegram">Link Telegram</button>
+            </form>
+            {% endif %}
+
+            <form action="{{ url_for('home') }}" method="get">
+                <button type="submit" class="action-btn admin">Home</button>
+            </form>
+            <form action="{{ url_for('logout') }}" method="get">
+                <button type="submit" class="action-btn logout">Logout</button>
+            </form>
+        </div>
+    </header>
+
+    <section class="stats">
+        <div class="stat-card">
+            <span class="label">Email</span>
+            <span class="value">{{ user_data.email }}</span>
+        </div>
+        <div class="stat-card">
+            <span class="label">Balance</span>
+            {% if user_data.balance < 0 %}
+                <span class="value-low" id="user-balance">{{ user_data.balance }}</span>
+            {% else %}
+                <span class="value" id="user-balance">{{ user_data.balance }}</span>
+            {% endif %}
+        </div>
+        <div class="stat-card">
+            <span class="label">Transactions</span>
+            <span class="value" id="transactions-count">{{ transactions_count }}</span>
+        </div>
+    </section>
+
+    <div class="content">
+
+        <!-- Transactions list -->
+        <section class="transactions">
+            <h2>Transactions</h2>
+
+            {% if transactions %}
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Note</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for tx in transactions %}
+                        <tr class="{{ 'income' if tx.type == 'income' else 'expense' }}">
+                            <td>{{ tx.amount }}</td>
+                            <td>{{ tx.category }}</td>
+                            <td>{{ tx.note or '-' }}</td>
+                            <td>{{ tx.created_at }}</td>
+                            <td class="delete-cell">
+                                <form action="{{ url_for('delete_transaction', tx_id=tx.tx_id) }}" method="post">
+                                    <button class="delete-btn" type="submit">✕</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+                <p class="empty">No transactions yet <b>:(</b></p>
+            {% endif %}
+        </section>
+
+        <!-- Create transaction -->
+        <section class="create-transaction">
+            <h2>New Transaction</h2>
+
+            <form class="transaction-form"
+                action="{{ url_for('create_transaction') }}"
+                method="post">
+
+                <!-- Transaction type -->
+                <div class="type-switch">
+                    <button type="button" class="type-btn active" data-type="income">Income</button>
+                    <button type="button" class="type-btn" data-type="expense">Expense</button>
+                </div>
+
+                <input type="hidden" name="type" id="tx-type" value="income">
+
+                <!-- Custom styled category select -->
+                <div class="custom-select">
+                    <select name="category" id="category-select" required style="display: none;">
+                        <!-- Options will be populated by JavaScript -->
+                    </select>
+                    <div class="custom-select__trigger">
+                        <span>Select category</span>
+                        <div class="arrow">▼</div>
+                    </div>
+                    <div class="custom-options">
+                        <!-- Options will be populated by JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Custom category input -->
+                <input type="text"
+                    name="custom_category"
+                    id="custom-category"
+                    placeholder="Enter category name..."
+                    style="display: none;">
+
+                <input type="number" name="amount" placeholder="Amount" required>
+
+                <textarea name="note" placeholder="Note (Not required)"></textarea>
+
+                <button type="submit">Create transaction</button>
+            </form>
+        </section>
+
+    </div>
+    
+</div>
+<script src="{{ url_for('static', filename='js/profile.js') }}?v={{ config['VERSION'] }}"></script>
+</body>
+</html>

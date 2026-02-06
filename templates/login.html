@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход — awtik-cash</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login_style.css') }}?v={{ config['VERSION'] }}">
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" />
+</head>
+<body>
+    <div class="main-container">
+        <!-- Брендинг -->
+        <div class="brand">
+            <h1>awtik-cash</h1>
+            <p>Контроль финансов в одном месте</p>
+        </div>
+
+        <!-- Flash-сообщения -->
+        {% with messages = get_flashed_messages(with_categories=True) %}
+            {% for cat, message in messages %}
+                <span class="flash-{{ cat }}">{{ message }}</span>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Форма входа -->
+        <form class="login-form" action="{{ url_for('login') }}" method="post">
+            <div class="input-group">
+                <label for="login">Логин или Email</label>
+                <input type="text" 
+                       id="login" 
+                       name="login" 
+                       class="input-field" 
+                       placeholder="Введите имя пользователя или email"
+                       required 
+                       value="{{ login if login else ''}}">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" 
+                       id="password" 
+                       name="password" 
+                       class="input-field" 
+                       placeholder="Введите ваш пароль"
+                       required 
+                       value="{{ password if password else ''}}">
+            </div>
+
+            <div class="form-options">
+                <label class="remember-me">
+                    <input type="checkbox" class="checkbox" name="remember">
+                    <span>Запомнить меня</span>
+                </label>
+                <a href="#" class="forgot-password">Забыли пароль?</a>
+            </div>
+
+            <button type="submit" class="submit-btn">Войти в аккаунт</button>
+        </form>
+
+        <!-- Декоративная линия -->
+        <div class="decorative-line"></div>
+
+        <!-- Навигационные ссылки -->
+        <div class="nav-links">
+            <a href="{{ url_for('register') }}" class="nav-link primary">
+                Создать новый аккаунт
+            </a>
+            
+            <a href="{{ url_for('home') }}" class="nav-link">
+                ← Вернуться на главную
+            </a>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/login.js') }}?v={{ config['VERSION'] }}"></script>
+</body>
+</html>

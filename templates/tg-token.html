@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Link — awtik-cash</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile_style.css') }}?v={{ config['VERSION'] }}">
+    
+    <style>
+        /* Дополнительный стиль для кнопки пересоздания в духе вашего CSS */
+        .action-btn.recreate {
+            color: #ffd36b; 
+            border-color: rgba(255, 211, 107, 0.2);
+            background: rgba(255, 211, 107, 0.05);
+        }
+        .action-btn.recreate:hover {
+            background: rgba(255, 211, 107, 0.1);
+            box-shadow: 0 8px 25px rgba(255, 211, 107, 0.2);
+            transform: translateY(-3px);
+            color: #ffda85;
+        }
+    </style>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/icon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/icon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/icon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='images/icon/apple-touch-icon.png') }}" />
+    <meta name="apple-mobile-web-app-title" content="awtik-cash" />
+    <link rel="manifest" href="{{ url_for('static', filename='images/icon/site.webmanifest') }}" /></head>
+<body>
+
+<div id="notifications" class="notifications"></div>
+
+<div class="container">
+    <header class="profile-header" style="justify-content: center; text-align: center;">
+        <div class="profile-title">
+            <h1>Telegram Bot</h1>
+            <p class="username">Link your account to Telegram</p>
+        </div>
+    </header>
+
+    <div class="content" style="display: flex; justify-content: center; grid-template-columns: none;">
+        <section class="stats" style="max-width: 500px; width: 100%;">
+            <div class="stat-card" style="text-align: center; cursor: pointer;" onclick="copyToken()">
+                <span class="label">Your Connection Token</span>
+                <span class="value" id="bot-token" style="letter-spacing: 2px; font-family: monospace;">{{ connection_token }}</span>
+                <p style="color: #666; font-size: 12px; margin-top: 15px;">Click to copy and send it to the bot</p>
+            </div>
+        </section>
+    </div>
+
+    <div class="header-actions" style="justify-content: center; margin-top: 30px; gap: 15px;">
+        <form action="{{ url_for('telegram_token') }}" method="post">
+            <button type="submit" class="action-btn recreate">Recreate Token</button>
+        </form>
+
+        <form action="{{ url_for('profile') }}" method="get">
+            <button type="submit" class="action-btn admin">Back to Profile</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/telegram_link.js') }}?v={{ config['VERSION'] }}"></script>
+
+</body>
+</html>
