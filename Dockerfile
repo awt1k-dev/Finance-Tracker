@@ -2,11 +2,8 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Копируем зависимости
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Устанавливаем зависимости + gunicorn
+RUN pip install --no-cache-dir -r requirements.txt gunicorn
 
-# Копируем все файлы проекта
 COPY . .
-
-# По умолчанию ничего не запускаем, это сделает docker-compose

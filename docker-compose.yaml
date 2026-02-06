@@ -1,20 +1,20 @@
-version: '3.8'
-
 services:
-  # Контейнер для Flask
   web:
     build: .
-    command: python app.py
+    # gunicorn [название_файла]:[название_переменной_app]
+    # -w 4 означает 4 рабочих процесса
+    # -b 0.0.0.0:5000 привязка к порту
+    command: gunicorn -w 4 -b 0.0.0.0:5000 app:app
     ports:
       - "5000:5000"
     volumes:
-      - ./database.db:/app/database.db  # Мапим файл БД
+      - ./data:/app/data  # Исправленный путь к папке с БД
     env_file:
       - .env
     restart: always
 
-  # Контейнер для Бота
   bot:
+    # Оставляем как было, бот запускается напрямую
     build: .
     command: python bot.py
     volumes:

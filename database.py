@@ -10,8 +10,8 @@ class Database:
         self.create_db()
 
     def get_conn(self) -> sqlite3.Connection:
-        db_path = os.getenv("DB_PATH", "database.db")
-        return sqlite3.connect("database.db", timeout=10)
+        db_path = os.getenv("DB_PATH", "data/database.db")
+        return sqlite3.connect(db_path, timeout=10)
 
     def create_db(self):
         conn = self.get_conn()
@@ -101,12 +101,14 @@ class Database:
         conn = self.get_conn()
         conn.row_factory = sqlite3.Row
         user_data = conn.execute("SELECT username, email, balance FROM users WHERE id = ?", (user_id, )).fetchone()
+        conn.close()
         return user_data
     
     def check_telegram_verify(self, user_id: int) -> bool:
         """Checking verify telegram"""
         conn = self.get_conn()
         user = conn.execute("SELECT tg_verify FROM users WHERE id = ?", (user_id, )).fetchone()
+        conn.close()
         if user:
             verify = user[0]
             return True if verify == "True" else False
@@ -116,6 +118,7 @@ class Database:
         conn = self.get_conn()
         # Getting token for current user_id
         token = conn.execute("SELECT tg_token FROM users WHERE id = ?", (user_id, )).fetchone()
+        conn.close()
         if token:
             return str(token[0])
         else:
@@ -133,6 +136,7 @@ class Database:
             conn = self.get_conn()
             conn.execute("UPDATE users SET tg_token = ? WHERE id = ?", (token, user_id))
             conn.commit()
+            conn.close()
             return {
                 "status": True,
                 "exception": "None",
@@ -211,6 +215,7 @@ class Database:
                     "exception": "Failed to update DB"
                 }
         else:
+            conn.close()
             return {
                 "status": False,
                 "exception": "Failed to create a token"
@@ -228,6 +233,7 @@ class Database:
         conn = self.get_conn()
         conn.row_factory = sqlite3.Row
         transactions = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY created_at DESC", (user_id, )).fetchall()
+        conn.close()
         return transactions
     
     def check_user_transaction_access(self, user_id: int, tx_id: int) -> bool:
@@ -252,6 +258,7 @@ class Database:
             self.calculate_new_balance(user_id)
             return (True, "Success")
         except Exception as e:
+            conn.close()
             return (False, f"Error: {e}")
     
     def create_transaction(self, user_id: int, type: str, amount: int, category: str, note: str | None) -> tuple[bool, str]:
@@ -265,6 +272,7 @@ class Database:
             self.calculate_new_balance(user_id)
             return (True, "Success")
         except Exception as e:
+            conn.close()
             return (False, f"Error: {e}")
         
     def get_current_balance(self, user_id: int) -> int:
@@ -351,4 +359,5 @@ class Database:
         conn = self.get_conn()
         conn.row_factory = sqlite3.Row
         tx = conn.execute("SELECT * FROM transactions WHERE user_id = ? ORDER BY tx_id DESC LIMIT 1", (user_id, )).fetchone()
+        conn.close()
         return dict(tx)
