@@ -1,22 +1,17 @@
 import sqlite3
 from werkzeug.security import check_password_hash, generate_password_hash
 import datetime
+import os
 
-<<<<<<< HEAD
 import secrets
 
-=======
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
 class Database:
     def __init__(self):
         self.create_db()
 
     def get_conn(self) -> sqlite3.Connection:
-<<<<<<< HEAD
+        db_path = os.getenv("DB_PATH", "database.db")
         return sqlite3.connect("database.db", timeout=10)
-=======
-        return sqlite3.connect("database.db")
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
 
     def create_db(self):
         conn = self.get_conn()
@@ -27,14 +22,10 @@ class Database:
                      email TEXT UNIQUE,
                      password_hash TEXT,
                      balance INTEGER,
-<<<<<<< HEAD
                      role TEXT DEFAULT user,
                      tg_id TEXT DEFAULT NULL,
                      tg_token TEXT DEFAULT NULL,
                      tg_verify TEXT DEFAULT "False")""")
-=======
-                     role TEXT DEFAULT user)""")
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
         
         # Transactions Table
         conn.execute("""CREATE TABLE IF NOT EXISTS transactions (
@@ -104,10 +95,6 @@ class Database:
             user_id = conn.execute("SELECT id FROM users WHERE username = ?", (login, )).fetchone()
         conn.close()
         return int(user_id[0])
-<<<<<<< HEAD
-=======
-
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
     
     def get_user_for_profile(self, user_id: int) -> tuple[str, str, int]:
         """Returning [username, email, balance]"""
@@ -116,7 +103,6 @@ class Database:
         user_data = conn.execute("SELECT username, email, balance FROM users WHERE id = ?", (user_id, )).fetchone()
         return user_data
     
-<<<<<<< HEAD
     def check_telegram_verify(self, user_id: int) -> bool:
         """Checking verify telegram"""
         conn = self.get_conn()
@@ -230,8 +216,6 @@ class Database:
                 "exception": "Failed to create a token"
             }
     
-=======
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
     ##################################################################
     #                         Transactions
     ##################################################################
@@ -286,10 +270,7 @@ class Database:
     def get_current_balance(self, user_id: int) -> int:
         conn = self.get_conn()
         balance = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id, )).fetchone()[0]
-<<<<<<< HEAD
         conn.close()
-=======
->>>>>>> 03a239f7ec50b27e6fe22365793c3f822fd24a0c
         return balance
     
     def calculate_new_balance(self, user_id: int):

@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import os
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command
 from dotenv import load_dotenv
 from database import Database
@@ -13,7 +13,7 @@ BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN") # Добавь это в свой .e
 # Инициализация
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
-db = Database()
+database = Database()
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -39,23 +39,38 @@ async def cmd_link(message: types.Message):
     tg_id = message.from_user.id
 
     # Пробуем привязать через метод в БД
-    success = db.link_tg_user(token, tg_id)
+    success = database.link_tg_user(token, tg_id)
 
     if success:
-        await message.answer("✅ Успешно! Твой Telegram аккаунт привязан к профилю на сайте.")
+        user = database.get_user_for_profile(database.search_user_by_tg(tg_id).get("id"))
+        await message.answer(f"✅ Успешно! Поздравляю, {user[0]}! Теперь ты можешь пользоваться нашим сервисом и в Telegram!")
     else:
         await message.answer("❌ Ошибка! Неверный токен или срок его действия истек.")
 
 @dp.message(Command("balance"))
 async def get_balance(message: types.Message):
     tg_id = message.from_user.id
-    user = db.search_user_by_tg(tg_id)
+    user = database.search_user_by_tg(tg_id)
     if user.get("status"):
-        balance = db.get_current_balance(user.get("id"))
+        balance = database.get_current_balance(user.get("id"))
         await message.answer(f"Balance: {balance}")
     else:
         await message.answer("Ошибка!")
-        
+
+@dp.message(F.text == "Профиль")
+async def profile(message: types.Message):
+    id = message.from_user.id
+    user = database.search_user_by_tg(id)
+    if user.get("status"):
+        user_info = database.get_user_for_profile(user.get("id"))
+        text = (
+            "👤 <b>Профиль</b>\n"
+            "\n"
+            f"▫️ <b>Username:</b> <code>{user_info[0]}</code>\n"
+            f"▫️ <b>Email:</b> <code>{user_info[1]}</code>\n"
+            f"▫️ <b>Баланс:</b> <b>{user_info[2]} ₽</b>"
+        )
+        await message.answer(text, parse_mode="HTML")
 
 async def main():
     print("Бот запущен...")

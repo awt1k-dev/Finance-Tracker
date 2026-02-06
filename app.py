@@ -7,6 +7,7 @@ load_dotenv()
 import os
 from database import Database
 from datetime import timedelta
+import logging
 
 from flask_limiter import Limiter
 import time
@@ -20,6 +21,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("secret")
 app.permanent_session_lifetime = timedelta(days=14)
 app.config['VERSION'] = int(time.time())  # Таймстамп при запуске
+logging.basicConfig(level=logging.INFO)
 
 #####################################
 #        Requests limiter
